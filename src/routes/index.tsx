@@ -78,6 +78,25 @@ function Index() {
       </section>
 
       <section id="epocas" className="py-24 md:py-32">
+        <div className="mx-auto mb-12 max-w-[1440px] px-5 md:mb-14 md:px-10">
+          <div className="flex flex-col gap-6 rounded-bento border-2 border-border bg-background p-6 md:flex-row md:items-center md:justify-between md:gap-10 md:p-8" aria-label="Tu progreso de hoy">
+            <div>
+              <h2 className="text-2xl font-extrabold md:text-3xl">Tu progreso de hoy</h2>
+              <p className="mt-1 text-sm font-bold uppercase text-primary">Has explorado 2 de 6 bloques</p>
+            </div>
+            <div className="flex flex-col gap-5 sm:flex-row sm:items-center sm:gap-8">
+              <div className="flex gap-1.5" role="img" aria-label="Semana: 3 de 7 días completados">
+                {["L", "M", "X", "J", "V", "S", "D"].map((day, i) => (
+                  <span key={day} className={`grid size-9 place-items-center rounded-full text-xs font-extrabold ${i < 3 ? "bg-success text-success-foreground" : "border-2 border-border text-muted-foreground"}`}>{day}</span>
+                ))}
+              </div>
+              <div className="min-w-[220px] flex-1">
+                <div className="h-3 w-full overflow-hidden rounded-full bg-muted"><div className="h-full w-1/3 rounded-full bg-success" /></div>
+                <p className="mt-2 text-xs font-extrabold text-muted-foreground">33% completado · ¡sigue explorando!</p>
+              </div>
+            </div>
+          </div>
+        </div>
         <div className="mx-auto mb-10 flex max-w-[1440px] items-end justify-between px-5 md:px-10">
           <div><p className="mb-3 text-sm font-extrabold uppercase text-primary">Elige por dónde empezar</p><h2 className="max-w-3xl text-4xl font-extrabold leading-tight md:text-6xl">Seis puertas al pasado</h2></div>
           <div className="hidden gap-2 md:flex"><Button variant="icon" size="icon" onClick={() => slide(-1)} aria-label="Ver época anterior"><ArrowLeft /></Button><Button variant="icon" size="icon" onClick={() => slide(1)} aria-label="Ver época siguiente"><ArrowRight /></Button></div>
@@ -99,10 +118,10 @@ function Index() {
         </div>
       </section>
 
-      <section id="tiempo" className="mx-auto max-w-6xl px-5 py-24 md:px-10 md:py-36">
-        <div className="mx-auto mb-20 max-w-2xl text-center"><p className="mb-3 text-sm font-extrabold uppercase text-primary">Una pista lleva a otra</p><h2 className="text-4xl font-extrabold md:text-6xl">El tiempo corre por aquí</h2></div>
+      <section id="tiempo" className="mx-auto max-w-6xl px-5 py-12 md:px-10 md:py-20">
+        <div className="mx-auto mb-10 max-w-2xl text-center"><p className="mb-3 text-sm font-extrabold uppercase text-primary">Una pista lleva a otra</p><h2 className="text-4xl font-extrabold md:text-6xl">El tiempo corre por aquí</h2></div>
         <div className="timeline relative">
-          {moments.map(([year, title, text], index) => <article key={year} className={`relative mb-16 grid grid-cols-[46px_1fr] items-start gap-5 md:grid-cols-[1fr_90px_1fr] ${index % 2 ? "md:text-left" : "md:text-right"}`}>
+          {moments.map(([year, title, text], index) => <article key={year} className={`relative mb-8 grid grid-cols-[46px_1fr] items-start gap-5 md:grid-cols-[1fr_90px_1fr] ${index % 2 ? "md:text-left" : "md:text-right"}`}>
             <div className={`hidden md:block ${index % 2 ? "md:col-start-3" : "md:col-start-1"}`}><p className="text-sm font-extrabold text-primary">{year}</p><h3 className="mt-1 text-2xl font-extrabold">{title}</h3><p className="mt-2 font-medium text-muted-foreground">{text}</p></div>
             <div className="z-10 col-start-1 grid size-11 place-items-center rounded-full border-4 border-background bg-primary text-sm font-extrabold text-primary-foreground md:col-start-2">{index + 1}</div>
             <div className="col-start-2 md:hidden"><p className="text-sm font-extrabold text-primary">{year}</p><h3 className="mt-1 text-xl font-extrabold">{title}</h3><p className="mt-2 text-sm font-medium text-muted-foreground">{text}</p></div>
