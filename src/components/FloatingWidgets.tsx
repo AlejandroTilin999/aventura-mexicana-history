@@ -327,7 +327,7 @@ function Accesibilidad() {
         onClick={() => setAbierto((v) => !v)}
         className="h-14 w-14 rounded-full border-2 bg-background shadow-lg"
       >
-        {abierto ? <Zap className="h-6 w-6" aria-hidden /> : <Accessibility className="h-6 w-6" aria-hidden />}
+        <Accessibility className="h-6 w-6" aria-hidden />
       </Button>
     </div>
   );
