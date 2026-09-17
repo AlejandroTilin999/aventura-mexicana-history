@@ -29,7 +29,7 @@ export const Route = createFileRoute("/bloque1")({
 const tonos = ["bg-highlight", "bg-coral text-coral-foreground", "bg-era-turquoise"];
 
 function Bloque1Page() {
-  const [abierto, setAbierto] = useState<string | null>(bloque1.temas[0].id);
+  const [abierto, setAbierto] = useState<string | null>(bloque1.temas[0]?.id ?? null);
   const [detalle, setDetalle] = useState<Subtema | null>(null);
 
   useEffect(() => {
