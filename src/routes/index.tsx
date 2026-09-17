@@ -102,10 +102,18 @@ function Index() {
           <div className="hidden gap-2 md:flex"><Button variant="icon" size="icon" onClick={() => slide(-1)} aria-label="Ver época anterior"><ArrowLeft /></Button><Button variant="icon" size="icon" onClick={() => slide(1)} aria-label="Ver época siguiente"><ArrowRight /></Button></div>
         </div>
         <div ref={rail} className="era-rail flex snap-x snap-mandatory gap-5 overflow-x-auto px-[max(1.25rem,calc((100vw-1440px)/2+2.5rem))] pb-8">
-          {eras.map((era, index) => <article key={era.title} className={`group relative h-[500px] w-[82vw] max-w-[430px] shrink-0 snap-start overflow-hidden rounded-bento border-2 border-border ${era.tone}`}>
-            <img src={era.image} width={1024} height={768} loading="lazy" alt="" className="h-[58%] w-full object-cover transition-transform duration-500 group-hover:scale-105" />
-            <div className="absolute inset-x-0 bottom-0 bg-background p-6"><p className="text-xs font-extrabold uppercase text-primary">{String(index + 1).padStart(2, "0")} · {era.kicker}</p><h3 className="mt-2 text-2xl font-extrabold">{era.title}</h3><p className="mt-2 text-sm font-medium text-muted-foreground">{era.text}</p></div>
-          </article>)}
+          {eras.map((era, index) => {
+            const card = (
+              <>
+                <img src={era.image} width={1024} height={768} loading="lazy" alt="" className="h-[58%] w-full object-cover transition-transform duration-500 group-hover:scale-105" />
+                <div className="absolute inset-x-0 bottom-0 bg-background p-6"><p className="text-xs font-extrabold uppercase text-primary">{String(index + 1).padStart(2, "0")} · {era.kicker}</p><h3 className="mt-2 text-2xl font-extrabold">{era.title}</h3><p className="mt-2 text-sm font-medium text-muted-foreground">{era.text}</p>{index === 0 && <p className="mt-3 inline-flex items-center gap-1 text-xs font-extrabold uppercase text-primary">Abrir bloque <ArrowRight className="size-3" /></p>}</div>
+              </>
+            );
+            const className = `group relative h-[500px] w-[82vw] max-w-[430px] shrink-0 snap-start overflow-hidden rounded-bento border-2 border-border ${era.tone}`;
+            return index === 0
+              ? <Link key={era.title} to="/bloque1" className={`${className} block`}>{card}</Link>
+              : <article key={era.title} className={className}>{card}</article>;
+          })}
         </div>
       </section>
 
