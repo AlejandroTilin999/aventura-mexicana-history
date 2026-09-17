@@ -123,8 +123,8 @@ function Chatbot() {
                 <p>{m.text}</p>
                 {m.enlace && (
                   <Link
-                    to={m.enlace.to}
-                    hash={m.enlace.hash}
+                    to={m.enlace.to as "/"}
+                    {...(m.enlace.hash ? { hash: m.enlace.hash } : {})}
                     onClick={() => setAbierto(false)}
                     className="mt-1 inline-block font-semibold text-primary underline underline-offset-2"
                   >
