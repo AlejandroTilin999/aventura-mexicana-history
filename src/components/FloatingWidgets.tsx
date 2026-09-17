@@ -9,7 +9,7 @@ import {
   Type,
   Volume2,
   X,
-  Zap,
+
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
