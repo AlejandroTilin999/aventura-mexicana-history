@@ -1,16 +1,16 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import {
   Accessibility,
   Bot,
   Contrast,
   Minus,
   RotateCcw,
-  Send,
+  Square,
   Type,
   Volume2,
   X,
-
 } from "lucide-react";
+import { Link } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
@@ -18,80 +18,75 @@ import { cn } from "@/lib/utils";
 /* Chatbot de los 6 bloques                                            */
 /* ------------------------------------------------------------------ */
 
-type ChatMessage = { role: "user" | "bot"; text: string };
+type ChatMessage = {
+  role: "user" | "bot";
+  text: string;
+  enlace?: { texto: string; to: string; hash?: string };
+};
 
-const BLOQUES: { match: RegExp; titulo: string; respuesta: string }[] = [
+const PREGUNTAS: { id: number; texto: string; respuesta: string; enlace: { to: string; hash?: string } }[] = [
   {
-    match: /antiguo|olmeca|maya|azteca|mexica|tenochtitlan|pir[aá]mide|prehisp/i,
-    titulo: "México Antiguo",
+    id: 1,
+    texto: "¿Qué es el Bloque 1?",
     respuesta:
-      "Bloque 1 — México Antiguo: aquí viven los olmecas (los primeros, famosos por sus cabezas gigantes de piedra), los mayas (grandes astrónomos y matemáticos) y los aztecas o mexicas, que construyeron la ciudad de Tenochtitlan sobre un lago. ¿Quieres saber de otra época?",
+      "Bloque 1 — México Antiguo: aquí viven los olmecas, los mayas y los aztecas o mexicas, que construyeron la gran ciudad de Tenochtitlan sobre un lago.",
+    enlace: { to: "/bloque1" },
   },
   {
-    match: /conquista|virreinato|español|colonia|h[eé]rn[aá]n|cort[eé]s|1519|1521/i,
-    titulo: "Conquista y Virreinato",
+    id: 2,
+    texto: "¿Qué es el Bloque 2?",
     respuesta:
-      "Bloque 2 — Conquista y Virreinato: en 1519 llegaron los españoles y en 1521 cayó Tenochtitlan. Después vinieron casi 300 años de vida colonial: nuevas ciudades, comidas y costumbres mezcladas. ¿Exploramos otro bloque?",
+      "Bloque 2 — Conquista y Virreinato: en 1519 llegaron los españoles y en 1521 cayó Tenochtitlan. Después vinieron casi 300 años de vida colonial.",
+    enlace: { to: "/", hash: "epocas" },
   },
   {
-    match: /independencia|dolores|hidalgo|morelos|1810|1821|grito|campana/i,
-    titulo: "Independencia",
+    id: 3,
+    texto: "¿Qué es el Bloque 3?",
     respuesta:
-      "Bloque 3 — Independencia: el 16 de septiembre de 1810 el padre Miguel Hidalgo tocó la campana de Dolores y llamó a la lucha. Después siguió José María Morelos, hasta que en 1821 México logró ser independiente. ¿Cuál otro bloque te interesa?",
+      "Bloque 3 — Independencia: el 16 de septiembre de 1810 el padre Hidalgo tocó la campana de Dolores. En 1821 México logró ser independiente.",
+    enlace: { to: "/", hash: "epocas" },
   },
   {
-    match: /reforma|ju[aá]rez|puebla|5 de mayo|zaragoza|leyes/i,
-    titulo: "Reforma",
+    id: 4,
+    texto: "¿Qué es el Bloque 4?",
     respuesta:
-      "Bloque 4 — Reforma: Benito Juárez impulsó leyes para un México más justo. En esa época ocurrió la Batalla de Puebla del 5 de mayo de 1862, cuando el ejército mexicano venció al francés. ¿Seguimos con otro bloque?",
+      "Bloque 4 — Reforma: Benito Juárez impulsó leyes para un México más justo. En esa época ocurrió la Batalla de Puebla del 5 de mayo de 1862.",
+    enlace: { to: "/", hash: "epocas" },
   },
   {
-    match: /porfirio|revoluci[oó]n|madero|zapata|villa|1910|tren|d[ií]az/i,
-    titulo: "Porfiriato y Revolución",
+    id: 5,
+    texto: "¿Qué es el Bloque 5?",
     respuesta:
-      "Bloque 5 — Porfiriato y Revolución: después del largo gobierno de Porfirio Díaz, en 1910 comenzó la Revolución con Francisco I. Madero, Emiliano Zapata y Pancho Villa, que pedían tierra y justicia. ¿Qué otro bloque visitamos?",
+      "Bloque 5 — Porfiriato y Revolución: tras el largo gobierno de Porfirio Díaz, en 1910 comenzó la Revolución con Madero, Zapata y Villa.",
+    enlace: { to: "/", hash: "epocas" },
   },
   {
-    match: /contempor|moderno|actual|hoy|siglo xx|siglo xxi|tradicion|2026/i,
-    titulo: "México Contemporáneo",
+    id: 6,
+    texto: "¿Qué es el Bloque 6?",
     respuesta:
-      "Bloque 6 — México Contemporáneo: el México de los siglos XX y XXI, con sus grandes ciudades, su arte, sus fiestas y tradiciones vivas como el Día de Muertos. ¡La historia sigue escribiéndose!",
+      "Bloque 6 — México Contemporáneo: el México de los siglos XX y XXI, con sus grandes ciudades, su arte y tradiciones vivas como el Día de Muertos.",
+    enlace: { to: "/", hash: "epocas" },
   },
 ];
 
-const FUERA_DE_TEMA =
-  "Solo puedo hablar de los 6 bloques de historia de México. ¿Cuál te interesa?";
-
 const SALUDO =
-  "¡Hola! Soy el guía de México Increíble. Puedo contarte de 6 bloques: México Antiguo, Conquista y Virreinato, Independencia, Reforma, Porfiriato y Revolución, y México Contemporáneo. ¿Por cuál empezamos?";
-
-function responder(pregunta: string): string {
-  if (/^hola|^buenas|^hi\b|qué tal|que tal/i.test(pregunta.trim())) return SALUDO;
-  const bloque = BLOQUES.find((b) => b.match.test(pregunta));
-  return bloque ? bloque.respuesta : FUERA_DE_TEMA;
-}
+  "¡Hola! Soy el guía de México Increíble. Elige una pregunta y te cuento de qué trata cada bloque:";
 
 function Chatbot() {
   const [abierto, setAbierto] = useState(false);
-  const [mensajes, setMensajes] = useState<ChatMessage[]>([
-    { role: "bot", text: SALUDO },
-  ]);
-  const [entrada, setEntrada] = useState("");
+  const [mensajes, setMensajes] = useState<ChatMessage[]>([{ role: "bot", text: SALUDO }]);
   const listaRef = useRef<HTMLDivElement>(null);
-  const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    if (abierto) {
-      listaRef.current?.scrollTo({ top: listaRef.current.scrollHeight });
-      inputRef.current?.focus();
-    }
+    if (abierto) listaRef.current?.scrollTo({ top: listaRef.current.scrollHeight });
   }, [abierto, mensajes]);
 
-  const enviar = () => {
-    const texto = entrada.trim();
-    if (!texto) return;
-    setMensajes((m) => [...m, { role: "user", text: texto }, { role: "bot", text: responder(texto) }]);
-    setEntrada("");
+  const preguntar = (p: (typeof PREGUNTAS)[number]) => {
+    setMensajes((m) => [
+      ...m,
+      { role: "user", text: p.texto },
+      { role: "bot", text: p.respuesta, enlace: { texto: "Ir al bloque →", ...p.enlace } },
+    ]);
   };
 
   return (
@@ -116,7 +111,7 @@ function Chatbot() {
           </div>
           <div ref={listaRef} className="flex h-72 flex-col gap-2 overflow-y-auto px-3 py-3">
             {mensajes.map((m, i) => (
-              <p
+              <div
                 key={i}
                 className={cn(
                   "max-w-[85%] rounded-2xl px-3 py-2 text-sm leading-snug",
@@ -125,29 +120,32 @@ function Chatbot() {
                     : "self-start text-foreground",
                 )}
               >
-                {m.text}
-              </p>
+                <p>{m.text}</p>
+                {m.enlace && (
+                  <Link
+                    to={m.enlace.to}
+                    hash={m.enlace.hash}
+                    onClick={() => setAbierto(false)}
+                    className="mt-1 inline-block font-semibold text-primary underline underline-offset-2"
+                  >
+                    {m.enlace.texto}
+                  </Link>
+                )}
+              </div>
             ))}
           </div>
-          <form
-            className="flex items-center gap-2 border-t border-border p-2"
-            onSubmit={(e) => {
-              e.preventDefault();
-              enviar();
-            }}
-          >
-            <input
-              ref={inputRef}
-              value={entrada}
-              onChange={(e) => setEntrada(e.target.value)}
-              placeholder="Pregunta por un bloque…"
-              aria-label="Escribe tu pregunta sobre historia de México"
-              className="min-w-0 flex-1 rounded-full border border-border bg-background px-3 py-2 text-sm outline-none placeholder:text-muted-foreground focus:border-primary"
-            />
-            <Button type="submit" variant="primary" size="icon" aria-label="Enviar mensaje">
-              <Send className="h-4 w-4" aria-hidden />
-            </Button>
-          </form>
+          <div className="flex flex-wrap gap-2 border-t border-border p-3">
+            {PREGUNTAS.map((p) => (
+              <button
+                key={p.id}
+                type="button"
+                onClick={() => preguntar(p)}
+                className="rounded-full bg-primary px-3 py-1.5 text-xs font-semibold text-primary-foreground transition-opacity hover:opacity-90"
+              >
+                {p.texto}
+              </button>
+            ))}
+          </div>
         </div>
       )}
       <Button
@@ -176,9 +174,12 @@ type A11yState = {
 
 const A11Y_INICIAL: A11yState = { contraste: false, textoGrande: false, movimientoReducido: false };
 
+const SELECTOR_LEIBLE = "h1, h2, h3, h4, p, li, summary, [data-readable]";
+
 function Accesibilidad() {
   const [abierto, setAbierto] = useState(false);
   const [estado, setEstado] = useState<A11yState>(A11Y_INICIAL);
+  const [lectorActivo, setLectorActivo] = useState(false);
   const [leyendo, setLeyendo] = useState(false);
 
   useEffect(() => {
@@ -192,28 +193,62 @@ function Accesibilidad() {
 
   const alternar = (clave: keyof A11yState) => setEstado((e) => ({ ...e, [clave]: !e[clave] }));
 
-  const leerPagina = () => {
+  const detener = useCallback(() => {
+    window.speechSynthesis?.cancel();
+    setLeyendo(false);
+  }, []);
+
+  const hablar = useCallback((el: Element) => {
     const synth = window.speechSynthesis;
     if (!synth) return;
-    if (leyendo) {
-      synth.cancel();
-      setLeyendo(false);
-      return;
-    }
-    const texto = document.querySelector("main")?.textContent?.replace(/\s+/g, " ").trim() ?? "";
+    const texto = el.textContent?.replace(/\s+/g, " ").trim() ?? "";
     if (!texto) return;
-    const voz = new SpeechSynthesisUtterance(texto.slice(0, 4000));
+    synth.cancel();
+    const voz = new SpeechSynthesisUtterance(texto.slice(0, 2000));
     voz.lang = "es-MX";
     voz.onend = () => setLeyendo(false);
-    synth.cancel();
     synth.speak(voz);
     setLeyendo(true);
-  };
+  }, []);
+
+  // Lector por elemento: resalta al pasar el cursor y lee al hacer clic o enfocar.
+  useEffect(() => {
+    const html = document.documentElement;
+    html.classList.toggle("a11y-reader", lectorActivo);
+    if (!lectorActivo) {
+      detener();
+      return;
+    }
+
+    const alHacerClic = (e: MouseEvent) => {
+      const objetivo = (e.target as Element | null)?.closest(SELECTOR_LEIBLE);
+      if (!objetivo || !objetivo.closest("main")) return;
+      // Mientras el lector está activo, leer en lugar de navegar/abrir.
+      e.preventDefault();
+      e.stopPropagation();
+      hablar(objetivo);
+    };
+
+    const alEnfocar = (e: FocusEvent) => {
+      const objetivo = (e.target as Element | null)?.closest(SELECTOR_LEIBLE);
+      if (!objetivo || !objetivo.closest("main")) return;
+      hablar(objetivo);
+    };
+
+    document.addEventListener("click", alHacerClic, true);
+    document.addEventListener("focusin", alEnfocar);
+    return () => {
+      html.classList.remove("a11y-reader");
+      document.removeEventListener("click", alHacerClic, true);
+      document.removeEventListener("focusin", alEnfocar);
+      detener();
+    };
+  }, [lectorActivo, hablar, detener]);
 
   const restablecer = () => {
     setEstado(A11Y_INICIAL);
-    window.speechSynthesis?.cancel();
-    setLeyendo(false);
+    setLectorActivo(false);
+    detener();
   };
 
   const opciones: {
@@ -229,6 +264,16 @@ function Accesibilidad() {
 
   return (
     <div className="fixed bottom-5 left-5 z-50 flex flex-col items-start gap-3">
+      {leyendo && (
+        <button
+          type="button"
+          onClick={detener}
+          className="flex items-center gap-2 rounded-full bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground shadow-lg"
+        >
+          <Square className="h-4 w-4" aria-hidden />
+          Detener
+        </button>
+      )}
       {abierto && (
         <div
           role="dialog"
@@ -284,26 +329,41 @@ function Accesibilidad() {
             ))}
             <button
               type="button"
-              onClick={leerPagina}
-              aria-pressed={leyendo}
+              role="switch"
+              aria-checked={lectorActivo}
+              onClick={() => setLectorActivo((v) => !v)}
               className={cn(
                 "flex items-center gap-3 rounded-xl px-3 py-2.5 text-left transition-colors",
-                leyendo ? "bg-primary/10" : "hover:bg-muted",
+                lectorActivo ? "bg-primary/10" : "hover:bg-muted",
               )}
             >
               <span
                 className={cn(
                   "flex h-8 w-8 shrink-0 items-center justify-center rounded-full",
-                  leyendo ? "bg-primary text-primary-foreground" : "bg-muted text-foreground",
+                  lectorActivo ? "bg-primary text-primary-foreground" : "bg-muted text-foreground",
                 )}
               >
                 <Volume2 className="h-4 w-4" aria-hidden />
               </span>
               <span className="min-w-0 flex-1">
-                <span className="block text-sm font-semibold leading-tight">
-                  {leyendo ? "Detener lectura" : "Lector de voz"}
+                <span className="block text-sm font-semibold leading-tight">Lector de voz</span>
+                <span className="block text-xs text-muted-foreground">
+                  Haz clic en un texto y lo lee
                 </span>
-                <span className="block text-xs text-muted-foreground">Lee la página en voz alta</span>
+              </span>
+              <span
+                aria-hidden
+                className={cn(
+                  "h-5 w-9 shrink-0 rounded-full p-0.5 transition-colors",
+                  lectorActivo ? "bg-primary" : "bg-muted-foreground/30",
+                )}
+              >
+                <span
+                  className={cn(
+                    "block h-4 w-4 rounded-full bg-background transition-transform",
+                    lectorActivo && "translate-x-4",
+                  )}
+                />
               </span>
             </button>
             <button

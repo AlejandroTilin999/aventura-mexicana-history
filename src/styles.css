@@ -211,6 +211,13 @@ html.a11y-reduced-motion *::after {
   animation-duration: 0.01ms !important;
 }
 
+html.a11y-reader main :is(h1, h2, h3, h4, p, li, summary, [data-readable]):hover {
+  outline: 2px solid var(--primary);
+  outline-offset: 3px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
 html.a11y-contrast body {
   --background: oklch(1 0 0);
   --foreground: oklch(0.1 0 0);
