@@ -198,3 +198,25 @@
   html { scroll-behavior: auto; }
   *, *::before, *::after { scroll-behavior: auto !important; transition-duration: 0.01ms !important; }
 }
+
+/* Accesibilidad */
+html.a11y-large-text { font-size: 120%; }
+
+html.a11y-reduced-motion,
+html.a11y-reduced-motion * ,
+html.a11y-reduced-motion *::before,
+html.a11y-reduced-motion *::after {
+  scroll-behavior: auto !important;
+  transition-duration: 0.01ms !important;
+  animation-duration: 0.01ms !important;
+}
+
+html.a11y-contrast body {
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.1 0 0);
+  --muted-foreground: oklch(0.25 0 0);
+  --border: oklch(0.2 0 0);
+  --primary: oklch(0.35 0.18 285);
+  filter: none;
+}
+html.a11y-contrast body img { filter: contrast(1.1); }
