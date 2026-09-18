@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as Bloque1RouteImport } from './routes/bloque1'
 import { Route as Bloque2RouteImport } from './routes/bloque2'
+import { Route as Bloque3RouteImport } from './routes/bloque3'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -28,35 +29,44 @@ const Bloque2Route = Bloque2RouteImport.update({
   path: '/bloque2',
   getParentRoute: () => rootRouteImport,
 } as any)
+const Bloque3Route = Bloque3RouteImport.update({
+  id: '/bloque3',
+  path: '/bloque3',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/bloque1': typeof Bloque1Route
   '/bloque2': typeof Bloque2Route
+  '/bloque3': typeof Bloque3Route
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/bloque1': typeof Bloque1Route
   '/bloque2': typeof Bloque2Route
+  '/bloque3': typeof Bloque3Route
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/bloque1': typeof Bloque1Route
   '/bloque2': typeof Bloque2Route
+  '/bloque3': typeof Bloque3Route
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/bloque1' | '/bloque2'
+  fullPaths: '/' | '/bloque1' | '/bloque2' | '/bloque3'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/bloque1' | '/bloque2'
-  id: '__root__' | '/' | '/bloque1' | '/bloque2'
+  to: '/' | '/bloque1' | '/bloque2' | '/bloque3'
+  id: '__root__' | '/' | '/bloque1' | '/bloque2' | '/bloque3'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   Bloque1Route: typeof Bloque1Route
   Bloque2Route: typeof Bloque2Route
+  Bloque3Route: typeof Bloque3Route
 }
 
 declare module '@tanstack/react-router' {
@@ -82,6 +92,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof Bloque2RouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/bloque3': {
+      id: '/bloque3'
+      path: '/bloque3'
+      fullPath: '/bloque3'
+      preLoaderRoute: typeof Bloque3RouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -89,6 +106,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   Bloque1Route: Bloque1Route,
   Bloque2Route: Bloque2Route,
+  Bloque3Route: Bloque3Route,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
