@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as Bloque1RouteImport } from './routes/bloque1'
+import { Route as Bloque2RouteImport } from './routes/bloque2'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -22,31 +23,40 @@ const Bloque1Route = Bloque1RouteImport.update({
   path: '/bloque1',
   getParentRoute: () => rootRouteImport,
 } as any)
+const Bloque2Route = Bloque2RouteImport.update({
+  id: '/bloque2',
+  path: '/bloque2',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/bloque1': typeof Bloque1Route
+  '/bloque2': typeof Bloque2Route
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/bloque1': typeof Bloque1Route
+  '/bloque2': typeof Bloque2Route
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/bloque1': typeof Bloque1Route
+  '/bloque2': typeof Bloque2Route
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/bloque1'
+  fullPaths: '/' | '/bloque1' | '/bloque2'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/bloque1'
-  id: '__root__' | '/' | '/bloque1'
+  to: '/' | '/bloque1' | '/bloque2'
+  id: '__root__' | '/' | '/bloque1' | '/bloque2'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   Bloque1Route: typeof Bloque1Route
+  Bloque2Route: typeof Bloque2Route
 }
 
 declare module '@tanstack/react-router' {
@@ -65,12 +75,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof Bloque1RouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/bloque2': {
+      id: '/bloque2'
+      path: '/bloque2'
+      fullPath: '/bloque2'
+      preLoaderRoute: typeof Bloque2RouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   Bloque1Route: Bloque1Route,
+  Bloque2Route: Bloque2Route,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
