@@ -37,7 +37,7 @@ const PREGUNTAS: { id: number; texto: string; respuesta: string; enlace: { to: s
     texto: "¿Qué es el Bloque 2?",
     respuesta:
       "Bloque 2 — Conquista y Virreinato: en 1519 llegaron los españoles y en 1521 cayó Tenochtitlan. Después vinieron casi 300 años de vida colonial.",
-    enlace: { to: "/", hash: "epocas" },
+    enlace: { to: "/bloque2" },
   },
   {
     id: 3,
