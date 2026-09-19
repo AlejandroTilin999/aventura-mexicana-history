@@ -8,6 +8,7 @@ import independencia from "@/assets/era-independencia.png";
 import moderno from "@/assets/era-moderno.png";
 import prehispanica from "@/assets/era-prehispanica.png";
 import revolucion from "@/assets/era-revolucion.png";
+import virreinato from "@/assets/era-virreinato.png";
 import personajes from "@/assets/personajes-collage.png";
 import xolo from "@/assets/xolo-hero.png";
 import { Button } from "@/components/ui/button";
@@ -29,7 +30,7 @@ export const Route = createFileRoute("/")({
 const eras = [
   { kicker: "Antes de 1521", title: "México antiguo", text: "Ciudades, ciencia y culturas que miraban las estrellas.", image: prehispanica, tone: "bg-era-turquoise" },
   { kicker: "1519–1521", title: "Encuentro y conquista", text: "Dos mundos se encontraron y todo empezó a cambiar.", image: conquista, tone: "bg-era-sky" },
-  { kicker: "1521–1810", title: "Virreinato", text: "Nuevas ciudades, mezclas culturales y grandes preguntas.", image: personajes, tone: "bg-era-coral" },
+  { kicker: "1521–1786", title: "Virreinato", text: "Resistencias, comunidades y una sociedad hecha de muchas raíces.", image: virreinato, tone: "bg-era-coral" },
   { kicker: "1810–1821", title: "Independencia", text: "Una campana encendió el deseo de ser una nación libre.", image: independencia, tone: "bg-era-yellow" },
   { kicker: "1910–1920", title: "Revolución", text: "Trenes, ideas y personas que lucharon por un país más justo.", image: revolucion, tone: "bg-era-orange" },
   { kicker: "Hoy", title: "México moderno", text: "Tradiciones antiguas conviven con ciencia, arte y tecnología.", image: moderno, tone: "bg-era-lilac" },
@@ -106,11 +107,11 @@ function Index() {
             const card = (
               <>
                 <img src={era.image} width={1024} height={768} loading="lazy" alt="" className="h-[58%] w-full object-cover transition-transform duration-500 group-hover:scale-105" />
-                <div className="absolute inset-x-0 bottom-0 bg-background p-6"><p className="text-xs font-extrabold uppercase text-primary">{String(index + 1).padStart(2, "0")} · {era.kicker}</p><h3 className="mt-2 text-2xl font-extrabold">{era.title}</h3><p className="mt-2 text-sm font-medium text-muted-foreground">{era.text}</p>{index < 2 && <p className="mt-3 inline-flex items-center gap-1 text-xs font-extrabold uppercase text-primary">Abrir bloque <ArrowRight className="size-3" /></p>}</div>
+                <div className="absolute inset-x-0 bottom-0 bg-background p-6"><p className="text-xs font-extrabold uppercase text-primary">{String(index + 1).padStart(2, "0")} · {era.kicker}</p><h3 className="mt-2 text-2xl font-extrabold">{era.title}</h3><p className="mt-2 text-sm font-medium text-muted-foreground">{era.text}</p>{index < 3 && <p className="mt-3 inline-flex items-center gap-1 text-xs font-extrabold uppercase text-primary">Abrir bloque <ArrowRight className="size-3" /></p>}</div>
               </>
             );
             const className = `group relative h-[500px] w-[82vw] max-w-[430px] shrink-0 snap-start overflow-hidden rounded-bento border-2 border-border ${era.tone}`;
-            const to = index === 0 ? "/bloque1" : index === 1 ? "/bloque2" : null;
+            const to = index === 0 ? "/bloque1" : index === 1 ? "/bloque2" : index === 2 ? "/bloque3" : null;
             return to
               ? <Link key={era.title} to={to} className={`${className} block`}>{card}</Link>
               : <article key={era.title} className={className}>{card}</article>;

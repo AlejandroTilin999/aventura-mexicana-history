@@ -43,8 +43,8 @@ const PREGUNTAS: { id: number; texto: string; respuesta: string; enlace: { to: s
     id: 3,
     texto: "¿Qué es el Bloque 3?",
     respuesta:
-      "Bloque 3 — Independencia: el 16 de septiembre de 1810 el padre Hidalgo tocó la campana de Dolores. En 1821 México logró ser independiente.",
-    enlace: { to: "/", hash: "epocas" },
+      "Bloque 3 — El Virreinato: conoce la resistencia indígena, las comunidades, el mestizaje, el comercio, la salud y la organización de la Nueva España entre 1521 y 1786.",
+    enlace: { to: "/bloque3" },
   },
   {
     id: 4,
