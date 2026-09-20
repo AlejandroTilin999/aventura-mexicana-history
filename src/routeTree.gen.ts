@@ -13,6 +13,9 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as Bloque1RouteImport } from './routes/bloque1'
 import { Route as Bloque2RouteImport } from './routes/bloque2'
 import { Route as Bloque3RouteImport } from './routes/bloque3'
+import { Route as Bloque4RouteImport } from './routes/bloque4'
+import { Route as Bloque5RouteImport } from './routes/bloque5'
+import { Route as Bloque6RouteImport } from './routes/bloque6'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -34,18 +37,39 @@ const Bloque3Route = Bloque3RouteImport.update({
   path: '/bloque3',
   getParentRoute: () => rootRouteImport,
 } as any)
+const Bloque4Route = Bloque4RouteImport.update({
+  id: '/bloque4',
+  path: '/bloque4',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const Bloque5Route = Bloque5RouteImport.update({
+  id: '/bloque5',
+  path: '/bloque5',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const Bloque6Route = Bloque6RouteImport.update({
+  id: '/bloque6',
+  path: '/bloque6',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/bloque1': typeof Bloque1Route
   '/bloque2': typeof Bloque2Route
   '/bloque3': typeof Bloque3Route
+  '/bloque4': typeof Bloque4Route
+  '/bloque5': typeof Bloque5Route
+  '/bloque6': typeof Bloque6Route
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/bloque1': typeof Bloque1Route
   '/bloque2': typeof Bloque2Route
   '/bloque3': typeof Bloque3Route
+  '/bloque4': typeof Bloque4Route
+  '/bloque5': typeof Bloque5Route
+  '/bloque6': typeof Bloque6Route
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -53,13 +77,38 @@ export interface FileRoutesById {
   '/bloque1': typeof Bloque1Route
   '/bloque2': typeof Bloque2Route
   '/bloque3': typeof Bloque3Route
+  '/bloque4': typeof Bloque4Route
+  '/bloque5': typeof Bloque5Route
+  '/bloque6': typeof Bloque6Route
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/bloque1' | '/bloque2' | '/bloque3'
+  fullPaths:
+    | '/'
+    | '/bloque1'
+    | '/bloque2'
+    | '/bloque3'
+    | '/bloque4'
+    | '/bloque5'
+    | '/bloque6'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/bloque1' | '/bloque2' | '/bloque3'
-  id: '__root__' | '/' | '/bloque1' | '/bloque2' | '/bloque3'
+  to:
+    | '/'
+    | '/bloque1'
+    | '/bloque2'
+    | '/bloque3'
+    | '/bloque4'
+    | '/bloque5'
+    | '/bloque6'
+  id:
+    | '__root__'
+    | '/'
+    | '/bloque1'
+    | '/bloque2'
+    | '/bloque3'
+    | '/bloque4'
+    | '/bloque5'
+    | '/bloque6'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -67,6 +116,9 @@ export interface RootRouteChildren {
   Bloque1Route: typeof Bloque1Route
   Bloque2Route: typeof Bloque2Route
   Bloque3Route: typeof Bloque3Route
+  Bloque4Route: typeof Bloque4Route
+  Bloque5Route: typeof Bloque5Route
+  Bloque6Route: typeof Bloque6Route
 }
 
 declare module '@tanstack/react-router' {
@@ -99,6 +151,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof Bloque3RouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/bloque4': {
+      id: '/bloque4'
+      path: '/bloque4'
+      fullPath: '/bloque4'
+      preLoaderRoute: typeof Bloque4RouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/bloque5': {
+      id: '/bloque5'
+      path: '/bloque5'
+      fullPath: '/bloque5'
+      preLoaderRoute: typeof Bloque5RouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/bloque6': {
+      id: '/bloque6'
+      path: '/bloque6'
+      fullPath: '/bloque6'
+      preLoaderRoute: typeof Bloque6RouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -107,6 +180,9 @@ const rootRouteChildren: RootRouteChildren = {
   Bloque1Route: Bloque1Route,
   Bloque2Route: Bloque2Route,
   Bloque3Route: Bloque3Route,
+  Bloque4Route: Bloque4Route,
+  Bloque5Route: Bloque5Route,
+  Bloque6Route: Bloque6Route,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
