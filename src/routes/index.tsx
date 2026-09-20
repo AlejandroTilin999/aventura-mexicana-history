@@ -45,6 +45,8 @@ const moments = [
   ["2026", "La historia sigue", "Cada generación escribe una parte nueva. La tuya también cuenta."],
 ];
 
+const destinos = ["/bloque1", "/bloque2", "/bloque3", "/bloque4", "/bloque5", "/bloque6"] as const;
+
 function Index() {
   const rail = useRef<HTMLDivElement>(null);
   const slide = (direction: number) => rail.current?.scrollBy({ left: direction * 420, behavior: "smooth" });
@@ -107,14 +109,13 @@ function Index() {
             const card = (
               <>
                 <img src={era.image} width={1024} height={768} loading="lazy" alt="" className="h-[58%] w-full object-cover transition-transform duration-500 group-hover:scale-105" />
-                <div className="absolute inset-x-0 bottom-0 bg-background p-6"><p className="text-xs font-extrabold uppercase text-primary">{String(index + 1).padStart(2, "0")} · {era.kicker}</p><h3 className="mt-2 text-2xl font-extrabold">{era.title}</h3><p className="mt-2 text-sm font-medium text-muted-foreground">{era.text}</p>{index < 3 && <p className="mt-3 inline-flex items-center gap-1 text-xs font-extrabold uppercase text-primary">Abrir bloque <ArrowRight className="size-3" /></p>}</div>
+                <div className="absolute inset-x-0 bottom-0 bg-background p-6"><p className="text-xs font-extrabold uppercase text-primary">{String(index + 1).padStart(2, "0")} · {era.kicker}</p><h3 className="mt-2 text-2xl font-extrabold">{era.title}</h3><p className="mt-2 text-sm font-medium text-muted-foreground">{era.text}</p><p className="mt-3 inline-flex items-center gap-1 text-xs font-extrabold uppercase text-primary">Abrir bloque <ArrowRight className="size-3" /></p></div>
               </>
             );
             const className = `group relative h-[500px] w-[82vw] max-w-[430px] shrink-0 snap-start overflow-hidden rounded-bento border-2 border-border ${era.tone}`;
-            const to = index === 0 ? "/bloque1" : index === 1 ? "/bloque2" : index === 2 ? "/bloque3" : null;
-            return to
-              ? <Link key={era.title} to={to} className={`${className} block`}>{card}</Link>
-              : <article key={era.title} className={className}>{card}</article>;
+            const destino = destinos[index];
+            if (!destino) return null;
+            return <Link key={era.title} to={destino} className={`${className} block`}>{card}</Link>;
           })}
         </div>
       </section>

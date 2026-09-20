@@ -50,22 +50,22 @@ const PREGUNTAS: { id: number; texto: string; respuesta: string; enlace: { to: s
     id: 4,
     texto: "¿Qué es el Bloque 4?",
     respuesta:
-      "Bloque 4 — Reforma: Benito Juárez impulsó leyes para un México más justo. En esa época ocurrió la Batalla de Puebla del 5 de mayo de 1862.",
-    enlace: { to: "/", hash: "epocas" },
+      "Bloque 4 — Independencia: descubre las conspiraciones, la lucha de Hidalgo, Morelos y Guerrero, y la victoria que convirtió a México en una nación libre.",
+    enlace: { to: "/bloque4" },
   },
   {
     id: 5,
     texto: "¿Qué es el Bloque 5?",
     respuesta:
       "Bloque 5 — Porfiriato y Revolución: tras el largo gobierno de Porfirio Díaz, en 1910 comenzó la Revolución con Madero, Zapata y Villa.",
-    enlace: { to: "/", hash: "epocas" },
+    enlace: { to: "/bloque5" },
   },
   {
     id: 6,
     texto: "¿Qué es el Bloque 6?",
     respuesta:
-      "Bloque 6 — México Contemporáneo: el México de los siglos XX y XXI, con sus grandes ciudades, su arte y tradiciones vivas como el Día de Muertos.",
-    enlace: { to: "/", hash: "epocas" },
+      "Bloque 6 — México Moderno: conoce los cambios del campo, la tecnología, los derechos de la niñez y la diversidad cultural de los siglos XX y XXI.",
+    enlace: { to: "/bloque6" },
   },
 ];
 
@@ -123,7 +123,7 @@ function Chatbot() {
                 <p>{m.text}</p>
                 {m.enlace && (
                   <Link
-                    to={m.enlace.to as "/"}
+                    to={m.enlace.to as "/" | "/bloque1" | "/bloque2" | "/bloque3" | "/bloque4" | "/bloque5" | "/bloque6"}
                     {...(m.enlace.hash ? { hash: m.enlace.hash } : {})}
                     onClick={() => setAbierto(false)}
                     className="mt-1 inline-block font-semibold text-primary underline underline-offset-2"
