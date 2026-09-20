@@ -45,6 +45,8 @@ const moments = [
   ["2026", "La historia sigue", "Cada generación escribe una parte nueva. La tuya también cuenta."],
 ];
 
+const destinos = ["/bloque1", "/bloque2", "/bloque3", "/bloque4", "/bloque5", "/bloque6"] as const;
+
 function Index() {
   const rail = useRef<HTMLDivElement>(null);
   const slide = (direction: number) => rail.current?.scrollBy({ left: direction * 420, behavior: "smooth" });
@@ -111,8 +113,9 @@ function Index() {
               </>
             );
             const className = `group relative h-[500px] w-[82vw] max-w-[430px] shrink-0 snap-start overflow-hidden rounded-bento border-2 border-border ${era.tone}`;
-            const destinos = ["/bloque1", "/bloque2", "/bloque3", "/bloque4", "/bloque5", "/bloque6"] as const;
-            return <Link key={era.title} to={destinos[index]} className={`${className} block`}>{card}</Link>;
+            const destino = destinos[index];
+            if (!destino) return null;
+            return <Link key={era.title} to={destino} className={`${className} block`}>{card}</Link>;
           })}
         </div>
       </section>
