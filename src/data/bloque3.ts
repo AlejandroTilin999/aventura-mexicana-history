@@ -126,3 +126,41 @@ export const bloque3 = {
     },
   ] as Tema[],
 };
+
+export const quizBloque3 = [
+  {
+    pregunta: "¿En qué año invadió Nuño Beltrán de Guzmán la región de Michoacán?",
+    opciones: ["1521", "1530", "1810"],
+    correcta: 1,
+  },
+  {
+    pregunta: "¿Quién lideró la resistencia indígena contra Nuño de Guzmán?",
+    opciones: ["Francisco de Tenamaxtle", "Hernán Cortés", "Vasco de Quiroga"],
+    correcta: 0,
+  },
+  {
+    pregunta: "¿Cómo llamaban cariñosamente a Vasco de Quiroga?",
+    opciones: ["Tata Vasco", "El Irecha", "El Virrey"],
+    correcta: 0,
+  },
+  {
+    pregunta: "¿Qué fundó Vasco de Quiroga en 1533?",
+    opciones: ["El Hospital de Santa Fe", "La Casa de Moneda", "La Intendencia de Valladolid"],
+    correcta: 0,
+  },
+  {
+    pregunta: "¿Qué monedas se fabricaban a golpe de martillo en la época colonial?",
+    opciones: ["Las macuquinas", "Los pesos de oro", "Las monedas de busto"],
+    correcta: 0,
+  },
+  {
+    pregunta: "¿Qué enfermedad combatió la vacuna que llegó a México en el siglo XVIII?",
+    opciones: ["La viruela", "El tifo", "La gripe"],
+    correcta: 0,
+  },
+  {
+    pregunta: "¿En qué año se creó la Intendencia de Valladolid?",
+    opciones: ["1521", "1694", "1786"],
+    correcta: 2,
+  },
+];
