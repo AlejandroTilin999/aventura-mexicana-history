@@ -2,8 +2,10 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowLeft, ArrowRight, Minus, Plus, X } from "lucide-react";
 import { useEffect, useState } from "react";
 
-import { bloque1, type Subtema } from "@/data/bloque1";
+import { bloque1, quizBloque1, type Subtema } from "@/data/bloque1";
+import { Quiz } from "@/components/blocks/Quiz";
 import { Button } from "@/components/ui/button";
+
 
 export const Route = createFileRoute("/bloque1")({
   head: () => ({
