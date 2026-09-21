@@ -33,6 +33,8 @@ const tonos = ["bg-highlight", "bg-coral text-coral-foreground", "bg-era-turquoi
 function Bloque1Page() {
   const [abierto, setAbierto] = useState<string | null>(bloque1.temas[0]?.id ?? null);
   const [detalle, setDetalle] = useState<Subtema | null>(null);
+  const [quizAbierto, setQuizAbierto] = useState(false);
+
 
   useEffect(() => {
     if (!detalle) return;
