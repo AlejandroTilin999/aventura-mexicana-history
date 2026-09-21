@@ -2,8 +2,10 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowLeft, ArrowRight, Minus, Plus, X } from "lucide-react";
 import { useEffect, useState } from "react";
 
-import { bloque1, type Subtema } from "@/data/bloque1";
+import { bloque1, quizBloque1, type Subtema } from "@/data/bloque1";
+import { Quiz } from "@/components/blocks/Quiz";
 import { Button } from "@/components/ui/button";
+
 
 export const Route = createFileRoute("/bloque1")({
   head: () => ({
@@ -31,6 +33,8 @@ const tonos = ["bg-highlight", "bg-coral text-coral-foreground", "bg-era-turquoi
 function Bloque1Page() {
   const [abierto, setAbierto] = useState<string | null>(bloque1.temas[0]?.id ?? null);
   const [detalle, setDetalle] = useState<Subtema | null>(null);
+  const [quizAbierto, setQuizAbierto] = useState(false);
+
 
   useEffect(() => {
     if (!detalle) return;
@@ -104,12 +108,27 @@ function Bloque1Page() {
 
       <section className="mx-auto flex max-w-[1100px] flex-col items-start justify-between gap-5 border-t-2 border-border px-5 py-10 md:flex-row md:items-center md:px-10">
         <p className="text-lg font-extrabold">¿Listo para seguir el viaje?</p>
-        <Button asChild variant="sunshine" size="lg">
-          <Link to="/" hash="epocas">
-            Siguiente bloque <ArrowRight />
-          </Link>
-        </Button>
+        <div className="flex flex-wrap gap-3">
+          <Button variant="sunshine" size="lg" onClick={() => setQuizAbierto(true)}>
+            ¡Pon a prueba lo que aprendiste!
+          </Button>
+          <Button asChild variant="outline" size="lg">
+            <Link to="/" hash="epocas">
+              Siguiente bloque <ArrowRight />
+            </Link>
+          </Button>
+        </div>
       </section>
+
+      {quizAbierto && (
+        <Quiz
+          preguntas={quizBloque1}
+          tituloFinal="¡Felicidades, eres un experto en el México Antiguo!"
+          siguiente={{ to: "/bloque2", label: "Pasar al siguiente bloque" }}
+          onCerrar={() => setQuizAbierto(false)}
+        />
+      )}
+
 
       {detalle && (
         <div

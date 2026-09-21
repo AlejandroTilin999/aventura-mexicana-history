@@ -165,3 +165,67 @@ export const bloque1 = {
     },
   ] as Tema[],
 };
+
+export type Pregunta = {
+  pregunta: string;
+  opciones: string[];
+  correcta: number;
+};
+
+export const quizBloque1: Pregunta[] = [
+  {
+    pregunta: "¿Hace cuántos años vivieron las familias en El Opeño?",
+    opciones: ["1600 a.C.", "Hace 9,000 años", "1325 d.C."],
+    correcta: 1,
+  },
+  {
+    pregunta: "¿Qué sembraban las familias de El Opeño?",
+    opciones: ["Maíz", "Trigo", "Arroz"],
+    correcta: 0,
+  },
+  {
+    pregunta: "¿Dónde pintaban los pueblos cazadores y recolectores del norte?",
+    opciones: ["En rocas y cuevas", "En lienzos de tela", "En papel amate"],
+    correcta: 0,
+  },
+  {
+    pregunta: "¿Qué aprendieron a sembrar las comunidades agrícolas del occidente?",
+    opciones: ["Maíz, frijol y calabaza", "Uvas y manzanas", "Café y cacao"],
+    correcta: 0,
+  },
+  {
+    pregunta: "¿Qué cultura talló las cabezas colosales de piedra?",
+    opciones: ["Los olmecas", "Los mayas", "Los zapotecos"],
+    correcta: 0,
+  },
+  {
+    pregunta: "¿Cómo se llamaban los artistas que pintaban los códices?",
+    opciones: ["Los tlacuilos", "Los tlatoanis", "Los ahaw"],
+    correcta: 0,
+  },
+  {
+    pregunta: "¿Quién elegía al Tlatoani mexica?",
+    opciones: ["Un consejo de nobles y guerreros", "Todo el pueblo votaba", "Lo heredaba de su padre"],
+    correcta: 0,
+  },
+  {
+    pregunta: "¿Dónde vivían los señores zapotecos?",
+    opciones: ["En Monte Albán y valles de Oaxaca", "En Chichén Itzá", "En Tenochtitlan"],
+    correcta: 0,
+  },
+  {
+    pregunta: "¿Qué recibía el Ahaw maya en su coronación?",
+    opciones: [
+      "Un tocado de plumas de quetzal, un cetro y un nuevo nombre",
+      "Una espada de oro",
+      "Una corona de plata",
+    ],
+    correcta: 0,
+  },
+  {
+    pregunta: "¿Cómo se llamaba el gobernante purépecha?",
+    opciones: ["El Cazonci", "El Tlatoani", "El Ahaw"],
+    correcta: 0,
+  },
+];
+
