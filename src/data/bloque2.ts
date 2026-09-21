@@ -43,3 +43,25 @@ export const bloque2 = {
     },
   ] as Tema[],
 };
+
+export const quizBloque2 = [
+  {
+    pregunta: "¿En qué año cayó México-Tenochtitlan?",
+    opciones: ["1492", "1521", "1810"],
+    correcta: 1,
+  },
+  {
+    pregunta: "¿Quién era el máximo gobernante purépecha?",
+    opciones: ["El Irecha o Cazonci", "Hernán Cortés", "Moctezuma"],
+    correcta: 0,
+  },
+  {
+    pregunta: "¿Qué decidió hacer el Irecha al enterarse de la caída de Tenochtitlan?",
+    opciones: [
+      "Subordinarse pacíficamente a Hernán Cortés",
+      "Atacar a los españoles",
+      "Huir a otro continente",
+    ],
+    correcta: 0,
+  },
+];

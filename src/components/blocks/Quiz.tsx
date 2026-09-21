@@ -25,7 +25,7 @@ export function Quiz({ preguntas, tituloFinal, siguiente, onCerrar }: QuizProps)
   const [confirmar, setConfirmar] = useState(false);
 
   const total = preguntas.length;
-  const pregunta = preguntas[actual];
+  const pregunta = preguntas[actual]!;
   const progreso = Math.round(((terminado ? total : actual) / total) * 100);
 
   useEffect(() => {
