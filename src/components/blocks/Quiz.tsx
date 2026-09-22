@@ -1,6 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { ArrowRight, RotateCcw, X } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { Button } from "@/components/ui/button";
 
@@ -23,6 +23,8 @@ export function Quiz({ preguntas, tituloFinal, siguiente, onCerrar }: QuizProps)
   const [feedback, setFeedback] = useState<"bien" | "mal" | null>(null);
   const [terminado, setTerminado] = useState(false);
   const [confirmar, setConfirmar] = useState(false);
+  const [aciertos, setAciertos] = useState(0);
+  const temporizador = useRef<number | null>(null);
 
   const total = preguntas.length;
   const pregunta = preguntas[actual]!;
@@ -33,20 +35,15 @@ export function Quiz({ preguntas, tituloFinal, siguiente, onCerrar }: QuizProps)
       if (event.key === "Escape") setConfirmar(true);
     };
     window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
+    return () => {
+      window.removeEventListener("keydown", onKey);
+      if (temporizador.current !== null) window.clearTimeout(temporizador.current);
+    };
   }, []);
 
-  const responder = (index: number) => {
-    if (feedback === "bien") return;
-    setSeleccion(index);
-    if (index === pregunta.correcta) {
-      setFeedback("bien");
-    } else {
-      setFeedback("mal");
-    }
-  };
-
-  const continuar = () => {
+  const avanzar = (acierto: boolean) => {
+    const nuevosAciertos = aciertos + (acierto ? 1 : 0);
+    if (acierto) setAciertos(nuevosAciertos);
     if (actual + 1 >= total) {
       setTerminado(true);
     } else {
@@ -56,12 +53,28 @@ export function Quiz({ preguntas, tituloFinal, siguiente, onCerrar }: QuizProps)
     }
   };
 
+  const responder = (index: number) => {
+    if (feedback !== null) return; // una sola oportunidad por pregunta
+    setSeleccion(index);
+    const acierto = index === pregunta.correcta;
+    setFeedback(acierto ? "bien" : "mal");
+    temporizador.current = window.setTimeout(
+      () => avanzar(acierto),
+      acierto ? 1000 : 1500,
+    );
+  };
+
   const repetir = () => {
+    if (temporizador.current !== null) window.clearTimeout(temporizador.current);
     setActual(0);
     setSeleccion(null);
     setFeedback(null);
     setTerminado(false);
+    setAciertos(0);
   };
+
+  const porcentaje = total > 0 ? (aciertos / total) * 100 : 0;
+  const aprobado = porcentaje >= 70;
 
   return (
     <div
@@ -96,17 +109,16 @@ export function Quiz({ preguntas, tituloFinal, siguiente, onCerrar }: QuizProps)
 
             <div className="mt-6 grid gap-3">
               {pregunta.opciones.map((opcion, index) => {
-                const esCorrecta = index === pregunta.correcta;
                 const marcada = seleccion === index;
                 let estilo = "border-border hover:bg-hero-soft";
                 if (marcada && feedback === "bien") estilo = "border-success bg-highlight";
                 else if (marcada && feedback === "mal") estilo = "border-coral bg-coral/20";
-                else if (feedback === "bien" && esCorrecta) estilo = "border-success bg-highlight";
                 return (
                   <button
                     key={opcion}
                     type="button"
                     onClick={() => responder(index)}
+                    disabled={feedback !== null}
                     className={`flex items-center gap-3 rounded-2xl border-2 p-4 text-left text-base font-bold transition-colors ${estilo}`}
                   >
                     <span className="grid size-8 shrink-0 place-items-center rounded-full border-2 border-border bg-background text-sm font-extrabold">
@@ -119,12 +131,7 @@ export function Quiz({ preguntas, tituloFinal, siguiente, onCerrar }: QuizProps)
             </div>
 
             {feedback === "bien" && (
-              <div className="mt-5 flex flex-col items-start justify-between gap-3 sm:flex-row sm:items-center">
-                <p className="text-lg font-extrabold text-primary">¡Muy bien!</p>
-                <Button variant="sunshine" size="default" onClick={continuar}>
-                  {actual + 1 >= total ? "Ver resultado" : "Siguiente pregunta"} <ArrowRight />
-                </Button>
-              </div>
+              <p className="mt-5 text-lg font-extrabold text-primary">¡Muy bien!</p>
             )}
             {feedback === "mal" && (
               <p className="mt-5 text-lg font-extrabold text-coral-foreground">Inténtalo de nuevo</p>
@@ -133,9 +140,14 @@ export function Quiz({ preguntas, tituloFinal, siguiente, onCerrar }: QuizProps)
         ) : (
           <div className="flex flex-col items-start gap-6 pr-10">
             <p className="text-xs font-extrabold uppercase text-primary">Quiz terminado</p>
-            <h2 className="text-3xl font-extrabold leading-tight md:text-4xl">{tituloFinal}</h2>
+            <h2 className="text-3xl font-extrabold leading-tight md:text-4xl">
+              {aprobado ? tituloFinal : "¡Casi lo logras! Inténtalo de nuevo"}
+            </h2>
+            <p className="text-lg font-bold text-muted-foreground">
+              Acertaste {aciertos} de {total}
+            </p>
             <div className="flex flex-wrap gap-3">
-              {siguiente && (
+              {aprobado && siguiente && (
                 <Button asChild variant="sunshine" size="lg">
                   <Link to={siguiente.to}>
                     {siguiente.label} <ArrowRight />
